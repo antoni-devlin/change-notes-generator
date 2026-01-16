@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Change Note Generator</title>
+    <script src="diff.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Change Note Generator</h1>
+    <p>Paste your content below to generate organizational change notes.</p>
+
+    <div class="container">
+      <div class="box">
+        <h2>Current Content</h2>
+        <textarea
+          id="oldContent"
+          placeholder="Paste current markdown here..."
+        ></textarea>
+      </div>
+      <div class="box">
+        <h2>New Content</h2>
+        <textarea
+          id="newContent"
+          placeholder="Paste new markdown here..."
+        ></textarea>
+      </div>
+    </div>
+
+    <button id="generateBtn">Generate Change Notes</button>
+
+    <div id="output">Results will appear here...</div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

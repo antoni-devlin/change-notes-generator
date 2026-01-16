@@ -9,14 +9,47 @@
     <link rel="icon" type="image/x-icon" href="favicon.png" />
   </head>
   <body>
+    <header>
       <h1>Change note generator</h1>
       <p>Paste your content below to generate GOV.UK-style change notes.</p>
+    </header>
+
+    <main>
+      <section class="container" aria-labelledby="input-heading">
+        <h2 id="input-heading" class="visually-hidden">Content Inputs</h2>
+
+        <div class="box">
+          <label for="oldContent"><strong>Current Content</strong></label>
+          <textarea
+            id="oldContent"
+            placeholder="Paste current markdown here..."
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="box">
+          <label for="newContent"><strong>New Content</strong></label>
+          <textarea
+            id="newContent"
+            placeholder="Paste new markdown here..."
+            autocomplete="off"
+            spellcheck="false"
+          ></textarea>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="generateBtn" type="button">Generate Change Notes</button>
       </div>
-    </div>
 
-    <button id="generateBtn">Generate Change Notes</button>
-
-    <div id="output">Results will appear here...</div>
+      <section aria-labelledby="output-heading">
+        <h2 id="output-heading">Results</h2>
+        <div id="output" role="region" aria-live="polite">
+          Results will appear here...
+        </div>
+      </section>
+    </main>
 
     <script src="script.js"></script>
   </body>

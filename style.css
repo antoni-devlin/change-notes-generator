@@ -61,3 +61,31 @@ h2 {
     height: 200px;
   }
 }
+
+/* Add this to your existing style.css */
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+/* Helper class for screen-reader-only text */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+#output:focus {
+  outline: 2px solid #005ea5;
+}

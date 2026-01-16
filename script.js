@@ -75,3 +75,24 @@ function generateChangeNotes() {
 document
   .getElementById("generateBtn")
   .addEventListener("click", generateChangeNotes);
+
+// Function to copy change notes to clipboard
+function copyChangeNotes() {
+  const outputText = document.getElementById("output").textContent;
+  navigator.clipboard
+    .writeText(outputText)
+    .then(() => {
+      const btn = document.getElementById("copyBtn");
+      const originalText = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(() => {
+        btn.textContent = originalText;
+      }, 2000);
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+}
+
+// Bind the copy button
+document.getElementById("copyBtn").addEventListener("click", copyChangeNotes);

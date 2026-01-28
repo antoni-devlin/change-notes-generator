@@ -1,3 +1,25 @@
+function normaliseInput(str) {
+  if (typeof str !== "string") return "";
+
+  return (
+    str
+      .normalize("NFKC") // Compatibility Decomposition, followed by Canonical Composition
+      // 1. Handle Quotes & Apostrophes
+      .replace(/[\u2018\u2019\u201B\u2032]/g, "'") // Various single quotes/primes to '
+      .replace(/[\u201C\u201D\u201F\u2033]/g, '"') // Various double quotes/primes to "
+
+      // 2. Handle Dashes
+      .replace(/[\u2013\u2014\u2015]/g, "-") // En-dash, em-dash, horizontal bar to -
+
+      // 3. Handle Whitespace
+      .replace(/[ \t]+/g, " ") // Convert all tabs and multiple spaces to single space
+
+      // 4. Final Cleanup
+      .trim()
+      .toLowerCase()
+  );
+}
+
 /**
  * Traverses the text to find the Markdown heading hierarchy for a specific line.
  */
@@ -27,8 +49,8 @@ function getHeadingState(text, targetLine) {
  * Main function to generate the diff notes.
  */
 function generateChangeNotes() {
-  const oldText = document.getElementById("oldContent").value;
-  const newText = document.getElementById("newContent").value;
+  const oldText = normaliseInput(document.getElementById("oldContent").value);
+  const newText = normaliseInput(document.getElementById("newContent").value);
   const outputDiv = document.getElementById("output");
 
   const diff = Diff.diffLines(oldText, newText, { newlineIsToken: true });

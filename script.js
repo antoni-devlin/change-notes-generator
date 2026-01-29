@@ -16,7 +16,6 @@ function normaliseInput(str) {
 
       // 4. Final Cleanup
       .trim()
-      .toLowerCase()
   );
 }
 

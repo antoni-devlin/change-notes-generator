@@ -62,8 +62,8 @@ function generateChangeNotes() {
     const nextPart = diff[i + 1];
     const value = part.value.trim();
 
-    // Skip headers (we only want body content changes) and empty lines
-    if (!value || value.startsWith("#")) continue;
+    // Skip empty lines only
+    if (!value) continue;
 
     const contextText = part.added ? newText : oldText;
     const locationString = getHeadingState(contextText, value);

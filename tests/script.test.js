@@ -81,7 +81,7 @@ function generateNotes(oldContent, newContent) {
   return app.elements.get("output").textContent;
 }
 
-test("normalizes punctuation and whitespace", () => {
+test("normalises punctuation and whitespace", () => {
   assert.equal(
     generateNotes("  It’s   ready—now.  ", "It's ready-now."),
     "No content changes detected.",
@@ -119,7 +119,7 @@ test("attributes a multi-line change to the heading where it starts", () => {
   assert.doesNotMatch(notes, /LOCATION:\n# Later section/);
 });
 
-test("batches changed bullets into one change for each unordered list marker", () => {
+test("batches changed bullets into one change for each unordered list", () => {
   for (const marker of ["-", "+", "*"]) {
     const oldContent = `# Guide\n${marker} Keep\n${marker} Old A\n${marker} Keep too\n${marker} Old B`;
     const newContent = `# Guide\n${marker} Keep\n${marker} New A\n${marker} Keep too\n${marker} New B`;

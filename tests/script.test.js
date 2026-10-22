@@ -81,7 +81,7 @@ function generateNotes(oldContent, newContent) {
   return app.elements.get("output").textContent;
 }
 
-test("normalizes punctuation and whitespace", () => {
+test("normalises punctuation and whitespace", () => {
   assert.equal(
     generateNotes("  It’s   ready—now.  ", "It's ready-now."),
     "No content changes detected.",
@@ -117,6 +117,23 @@ test("attributes a multi-line change to the heading where it starts", () => {
 
   assert.match(notes, /LOCATION:\n# First section/);
   assert.doesNotMatch(notes, /LOCATION:\n# Later section/);
+});
+
+test("batches changed bullets into one change for each unordered list", () => {
+  for (const marker of ["-", "+", "*"]) {
+    const oldContent = `# Guide\n${marker} Keep\n${marker} Old A\n${marker} Keep too\n${marker} Old B`;
+    const newContent = `# Guide\n${marker} Keep\n${marker} New A\n${marker} Keep too\n${marker} New B`;
+    const notes = generateNotes(oldContent, newContent);
+
+    assert.equal((notes.match(/\[\d+\]/g) || []).length, 1, marker);
+    assert.match(notes, /LOCATION:\n# Guide/);
+    assert.ok(
+      notes.includes(
+        `CHANGE\n\n${marker} Keep\n${marker} Old A\n${marker} Keep too\n${marker} Old B\n\nTO\n\n${marker} Keep\n${marker} New A\n${marker} Keep too\n${marker} New B`,
+      ),
+      marker,
+    );
+  }
 });
 
 test("copies the generated output and restores the button label", async () => {

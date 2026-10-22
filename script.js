@@ -44,6 +44,37 @@ function getHeadingState(text, targetLine) {
   return hierarchy ? `LOCATION:\n${hierarchy}` : `LOCATION:\nGeneral`;
 }
 
+function getDiffUnits(text) {
+  const lines = text.split("\n");
+  const units = [];
+  const isListItem = (line) => /^\s*(?:[-+*]|\d+[.)])\s+/.test(line);
+
+  for (let i = 0; i < lines.length; i++) {
+    if (!isListItem(lines[i])) {
+      units.push({ text: lines[i] });
+      continue;
+    }
+
+    const listLines = [lines[i]];
+    while (i + 1 < lines.length) {
+      if (isListItem(lines[i + 1]) || /^\s+\S/.test(lines[i + 1])) {
+        listLines.push(lines[++i]);
+      } else if (
+        !lines[i + 1].trim() &&
+        i + 2 < lines.length &&
+        isListItem(lines[i + 2])
+      ) {
+        listLines.push(lines[++i]);
+      } else {
+        break;
+      }
+    }
+    units.push({ text: listLines.join("\n") });
+  }
+
+  return units;
+}
+
 /**
  * Main function to generate the diff notes.
  */
@@ -52,7 +83,9 @@ function generateChangeNotes() {
   const newText = normaliseInput(document.getElementById("newContent").value);
   const outputDiv = document.getElementById("output");
 
-  const diff = Diff.diffLines(oldText, newText, { newlineIsToken: true });
+  const diff = Diff.diffArrays(getDiffUnits(oldText), getDiffUnits(newText), {
+    comparator: (oldUnit, newUnit) => oldUnit.text === newUnit.text,
+  });
 
   const notes = [];
   let changeCounter = 1;
@@ -60,19 +93,26 @@ function generateChangeNotes() {
   for (let i = 0; i < diff.length; i++) {
     const part = diff[i];
     const nextPart = diff[i + 1];
-    const value = part.value.trim();
+    const value = part.value
+      .map((unit) => unit.text)
+      .join("\n")
+      .trim();
 
     // Skip empty lines only
     if (!value) continue;
 
     const contextText = part.added ? newText : oldText;
-    const locationString = getHeadingState(contextText, value);
+    const locationString = getHeadingState(contextText, value.split("\n")[0]);
 
     let actionText = "";
 
     // Determine if this is a CHANGE (Remove + Add), DELETE, or ADD
     if (part.removed && nextPart && nextPart.added) {
-      actionText = `CHANGE\n\n${value}\n\nTO\n\n${nextPart.value.trim()}`;
+      const nextValue = nextPart.value
+        .map((unit) => unit.text)
+        .join("\n")
+        .trim();
+      actionText = `CHANGE\n\n${value}\n\nTO\n\n${nextValue}`;
       i++; // Skip next part as it's already handled
     } else if (part.removed) {
       actionText = `DELETE\n\n${value}`;

@@ -128,7 +128,7 @@ function generateChangeNotes() {
 
   outputDiv.textContent =
     notes.length > 0
-      ? notes.join("\n\n---\n\n")
+      ? `Zen:\nJira:\n\nSUMMARY\n\n${notes.join("\n\n---\n\n")}`
       : "No content changes detected.";
 }
 

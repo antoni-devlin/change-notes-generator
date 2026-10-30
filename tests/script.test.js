@@ -98,6 +98,18 @@ test("reports added and deleted content with its heading", () => {
   assert.match(deleted, /DELETE\n\nOld paragraph/);
 });
 
+test("adds fields for jira and zendesk before the complete list of change notes", () => {
+  const notes = generateNotes(
+    "Keep this\nAnd this",
+    "Added first\nKeep this\nAdded second\nAnd this",
+  );
+
+  assert.ok(notes.startsWith("Zen:\nJira:\n\nSUMMARY\n\n[1]"));
+  assert.equal((notes.match(/Zen/g) || []).length, 1);
+  assert.equal((notes.match(/Jira/g) || []).length, 1);
+  assert.equal((notes.match(/\[\d+\]/g) || []).length, 2);
+});
+
 test("reports replaced content as a change", () => {
   const notes = generateNotes(
     "# Guide\nOld paragraph",

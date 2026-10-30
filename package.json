@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "node --test tests/script.test.js",
+    "test": "node --test",
     "start": "npm exec http-server"
   },
   "repository": {
